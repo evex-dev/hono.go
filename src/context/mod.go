@@ -7,7 +7,7 @@ import (
 type Params map[string]string
 
 type Context struct {
-	Write   http.ResponseWriter
+	Writer   http.ResponseWriter
 	Request *http.Request
 	Params  Params
 }

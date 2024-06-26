@@ -1,18 +1,17 @@
-package router
+package server
 
 import (
-	"net/http"
-	"github.com/evex-dev/hono.go/context"
+	"github.com/evex-dev/hono.go/src/context"
 )
 
 type HandlerFunc func(*context.Context)
 
-type ContextMethod struct {
+type Route struct {
 	Method  string
 	Pattern string
 	Handler HandlerFunc
 }
 
 type Engine struct {
-	Route []*ContextMethod
+	Routes []*Route
 }

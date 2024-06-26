@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-
 	"github.com/evex-dev/hono.go/src/context"
 	"github.com/evex-dev/hono.go/src/server"
 )
@@ -13,9 +12,9 @@ func main() {
 	app.GET("/", func(c *context.Context) {
 		c.Status(200)
 		c.WriteString("Hello World")
-	}).GET("/a", func(c *context.Context) {
-		c.Status(400)
-		c.Write([]byte("Hello World"))
+	}).POST("/2", func(c *context.Context) {
+		c.Status(200)
+		c.Write([]byte("Hello World 2"))
 	})
 
 

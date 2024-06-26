@@ -12,6 +12,14 @@ type Route struct {
 	Handler HandlerFunc
 }
 
+type Routes struct{
+	Route []*Route
+}
+
 type Engine struct {
-	Routes []*Route
+	Routes
+}
+
+type Router struct {
+	Match func(path string) *Route
 }

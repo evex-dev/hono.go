@@ -12,13 +12,50 @@ func NewHonoGo() *HonoGo {
 
 // Listen function
 
-func (h *HonoGo) Run(addr string) error {
-	return h.Engine.Run(addr)
+type RunContext struct {
+	Addr string
+	Err error
+	Fire func() error
 }
 
-// func (h *HonoGo) RunTLS(addr string, cert, key string) error {
-// 	return h.Engine.Run(addr)
-// }
+func (r *RunContext) Callback(callbackFunc func(addr string, err error) error) *RunContext {
+	callbackResult := callbackFunc(r.Addr, r.Err)
+	if callbackResult != nil {
+		r.Err = callbackResult
+	}
+	return r
+}
+
+func (r *RunContext) SetPort(addr string) *RunContext {
+	r.Addr = ":" + addr
+	return r
+}
+
+// Init
+
+func (h *HonoGo) Init() *RunContext {
+	ctx := &RunContext{
+		Addr: ":3000",
+	}
+
+	ctx.Fire = func() error {
+		return h.Engine.Run(ctx.Addr)
+	}
+
+	return ctx
+}
+
+func (h *HonoGo) InitTLS(cert, key string) *RunContext {
+	ctx := &RunContext{
+		Addr: ":3000",
+	}
+
+	ctx.Fire = func() error {
+		return h.Engine.RunTLS(ctx.Addr, cert, key)
+	}
+
+	return ctx
+}
 
 // Methods
 

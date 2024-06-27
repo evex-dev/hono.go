@@ -26,7 +26,7 @@ func main() {
 		c.WriteString("Hello World")
 	})
 
-	app.Init()..Fire()
+	app.Init().Fire()
 }
 ```
 

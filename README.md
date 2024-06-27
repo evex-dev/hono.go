@@ -7,6 +7,31 @@ Web framework based on web standards in Golang.
 We are in the process of developing this project, so please keep on building issues/PRs.
 
 ## Example
+
+### Example 1 - Minimal
+
+```go
+package main
+
+import (
+	"github.com/evex-dev/hono.go/src/context"
+	"github.com/evex-dev/hono.go/src/server"
+)
+
+func main() {
+	app := server.NewHonoGo()
+
+	app.GET("/", func(c *context.Context) {
+		c.Status(200)
+		c.WriteString("Hello World")
+	})
+
+	app.Init()..Fire()
+}
+```
+
+### Example 2 - Options
+
 ```go
 package main
 
@@ -28,7 +53,7 @@ func main() {
 	})
 
 
-	app.Init().SetPort("3000").Callback(func(addr string, err error) error {
+	app.Init().SetPort("3000").Callback(func (addr string, err error) error {
 		fmt.Printf("Listening on http://localhost%s\n", addr)
 		return err
 	}).Fire()

@@ -10,16 +10,20 @@ type Route struct {
 	Method  string
 	Pattern string
 	Handler HandlerFunc
+	Index   int
+	IsMiddleware bool
 }
 
-type Routes struct{
-	Route []*Route
+type Routes struct {
+	RouteList []*Route
+	NotFoundHandler HandlerFunc
 }
 
 type Engine struct {
 	Routes
+	MatchRouter *Router
 }
 
 type Router struct {
-	Match func(path string) *Route
+	Match func(pattern string, method string) FoundRoutes
 }

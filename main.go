@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	app := server.NewHonoGo()
+	app := server.CreateHonoGo()
 
 	app.GET("/", func(c *context.Context) {
 		c.Status(200)

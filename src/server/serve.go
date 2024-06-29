@@ -46,15 +46,15 @@ func (e *Engine) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	e.Method(matchedRoutes[0], w, r, *params)
+	e.Method(matchedRoutes, w, r, *params)
 }
 
-func (e *Engine) Method(route *Route, w http.ResponseWriter, r *http.Request, params context.Params) {
+func (e *Engine) Method(routes []*Route, w http.ResponseWriter, r *http.Request, params context.Params) {
 	ctx := &context.Context{
 		Res:  w,
 		Req: r,
 		Params:  params,
 	}
 
-	route.Handler(ctx)
+	Compose(routes...)(ctx)
 }

@@ -1,9 +1,11 @@
 package server
 
 import (
-	"github.com/evex-dev/hono.go/src/context"
+	"fmt"
 	"regexp"
 	"strings"
+
+	"github.com/evex-dev/hono.go/src/context"
 )
 
 type TrieNode struct {
@@ -25,7 +27,7 @@ func NewTrieRouter(routes *Routes) *Router {
 	trie := NewTrie()
 
 	for _, route := range routes.RouteList {
-		trie.Insert(route.Pattern)
+		trie.Insert(PathFixer(route.Pattern))
 	}
 
 	return &Router{
@@ -33,7 +35,7 @@ func NewTrieRouter(routes *Routes) *Router {
 			foundRoutes := FoundRoutes{}
 			params := &context.Params{}
 			isFound := false
-			
+
 			for _, route := range routes.RouteList {
 				if route.Method != method && method != "ALL" {
 					continue
@@ -101,6 +103,13 @@ func (t *Trie) Insert(path string) {
 			}
 			current = current.paramChild
 			current.paramName = paramName
+		} else if part == "*" {
+			if current.children["*"] == nil {
+				current.children["*"] = &TrieNode{
+					children: make(map[string]*TrieNode),
+				}
+			}
+			current = current.children["*"]
 		} else {
 			if current.children[part] == nil {
 				current.children[part] = &TrieNode{
@@ -115,24 +124,20 @@ func (t *Trie) Insert(path string) {
 }
 
 func (t *Trie) Compare(path, pattern string) (*context.Params, bool) {
-	param, match, ok := t.Match(path)
-	if !ok {
-		return nil, ok
-	}
+	//fmt.Println("match test", path, pattern)
 
-	if match == pattern {
-		return nil, false
-	}
+	//test
+	fmt.Print(t.Match(pattern))
+	fmt.Print()
+	fmt.Println(path)
 
-	return param, true
+	return &context.Params{}, false
 }
 
-func (t *Trie) Match(path string) (*context.Params, string, bool) {
+func (t *Trie) Match(path string) (bool, map[string]string, string) {
 	current := t.root
-
-	params := make(context.Params)
-
-	var match string
+	params := make(map[string]string)
+	matchedPattern := ""
 
 	parts := strings.Split(path, "/")
 	for _, part := range parts {
@@ -150,16 +155,18 @@ func (t *Trie) Match(path string) (*context.Params, string, bool) {
 			if current.regexpPattern.MatchString(part) {
 				params[current.paramName] = part
 			} else {
-				return nil, "", false
+				return false, nil, ""
 			}
+		} else if current.children["*"] != nil {
+			current = current.children["*"]
 		} else {
-			return nil, "", false
+			return false, nil, ""
 		}
 	}
 
 	if current.isEnd {
-		match = current.pattern
+		matchedPattern = current.pattern
 	}
 
-	return &params, match, current.isEnd
+	return current.isEnd, params, matchedPattern
 }

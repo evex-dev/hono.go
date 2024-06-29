@@ -17,25 +17,25 @@ func (e *Engine) AddRoute(method, pattern string, handler HandlerFunc, isMiddlew
 }
 
 func (e *Engine) Run(addr string) error {
-	e.MatchRouter = NewRouter(&e.Routes)
+	e.MatchRouter = NewTrieRouter(&e.Routes)
 	
 	return http.ListenAndServe(addr, e)
 }
 
 func (e *Engine) RunTLS(addr string, cert, key string) error {
-	e.MatchRouter = NewRouter(&e.Routes)
+	e.MatchRouter = NewTrieRouter(&e.Routes)
 
 	return http.ListenAndServeTLS(addr, cert, key, e)
 }
 
 func (e *Engine) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	matchedRoute := e.MatchRouter.Match(r.URL.Path, r.Method)
+	matchedRoutes, params := e.MatchRouter.Match(r.URL.Path, r.Method)
 
-	if matchedRoute == nil {
+	if matchedRoutes == nil {
 		if e.NotFoundHandler != nil {
 			e.NotFoundHandler(&context.Context{
-				Writer:  w,
-				Request: r,
+				Res:  w,
+				Req: r,
 				Params:  context.Params{},
 			})
 			return
@@ -46,13 +46,13 @@ func (e *Engine) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	e.Method(matchedRoute[0], w, r, context.Params{})
+	e.Method(matchedRoutes[0], w, r, *params)
 }
 
 func (e *Engine) Method(route *Route, w http.ResponseWriter, r *http.Request, params context.Params) {
 	ctx := &context.Context{
-		Writer:  w,
-		Request: r,
+		Res:  w,
+		Req: r,
 		Params:  params,
 	}
 

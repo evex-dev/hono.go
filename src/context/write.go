@@ -2,31 +2,15 @@ package context
 
 import (
 	"encoding/json"
-	// "encoding/xml"
-	"fmt"
 )
 
-func (ctx *Context) Write(value []byte) error {
-	_, err := ctx.Writer.Write(value)
+func (ctx *Context) BODY(value []byte) error {
+	_, err := ctx.Res.Write(value)
 	return err
 }
-func (ctx *Context) WriteString(value string) error {
-	return ctx.Write([]byte(value))
-}
-
-func (ctx *Context) Fprint(value string) error {
-	_, err := fmt.Fprint(ctx.Writer, value)
-	return err
-}
-
-func (ctx *Context) Fprintf(value string) error {
-	_, err := fmt.Fprintf(ctx.Writer, value)
-	return err
-}
-
-func (ctx *Context) Fprintln(value string) error {
-	_, err := fmt.Fprintln(ctx.Writer, value)
-	return err
+func (ctx *Context) TEXT(value string) error {
+	ctx.SetHeader("Content-Type", "text/plain; charset=utf-8")
+	return ctx.BODY([]byte(value))
 }
 
 func (ctx *Context) JSON(value any) error {
@@ -34,5 +18,12 @@ func (ctx *Context) JSON(value any) error {
 	if err != nil {
 		return err
 	}
-	return ctx.Write(marshal)
+	ctx.SetHeader("Content-Type", "application/json; charset=utf-8")
+	return ctx.BODY(marshal)
 }
+
+func (ctx *Context) HTML(value string) error {
+	ctx.SetHeader("Content-Type", "text/html; charset=utf-8")
+	return ctx.BODY([]byte(value))
+}
+

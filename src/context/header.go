@@ -1,13 +1,13 @@
 package context
 
 func (ctx *Context) SetHeader(key, value string) {
-	ctx.Writer.Header().Set(key, value)
+	ctx.Res.Header().Set(key, value)
 }
 
 func (ctx *Context) AddHeader(key, value string) {
-	ctx.Writer.Header().Add(key, value)
+	ctx.Res.Header().Add(key, value)
 }
 
 func (ctx *Context) Status(status int) {
-	ctx.Writer.WriteHeader(status)
+	ctx.Res.WriteHeader(status)
 }

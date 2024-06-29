@@ -1,9 +1,9 @@
 package server
 
 import (
+	"github.com/evex-dev/hono.go/src/context"
 	"regexp"
 	"strings"
-	"github.com/evex-dev/hono.go/src/context"
 )
 
 type TrieNode struct {
@@ -13,6 +13,7 @@ type TrieNode struct {
 	regexpChild   *TrieNode
 	regexpPattern *regexp.Regexp
 	paramName     string
+	pattern       string
 }
 
 type Trie struct {
@@ -30,16 +31,36 @@ func NewTrieRouter(routes *Routes) *Router {
 	return &Router{
 		Match: func(pattern string, method string) (FoundRoutes, *context.Params) {
 			foundRoutes := FoundRoutes{}
+			params := &context.Params{}
+			isFound := false
+			
+			for _, route := range routes.RouteList {
+				if route.Method != method && method != "ALL" {
+					continue
+				}
 
-			searchResult, isFound := trie.Match(pattern)
-
-			if isFound {
-				return foundRoutes, searchResult
+				paramsResult, isSuccess := trie.Compare(route.Pattern, pattern)
+				if isSuccess {
+					params = MergeParams(params, paramsResult)
+					foundRoutes = append(foundRoutes, route)
+					isFound = true
+				}
 			}
 
-			return nil, &context.Params{}
+			if isFound {
+				return foundRoutes, params
+			}
+
+			return nil, params
 		},
 	}
+}
+
+func MergeParams(params1, params2 *context.Params) *context.Params {
+	for key, value := range *params2 {
+		(*params1)[key] = value
+	}
+	return params1
 }
 
 func NewTrie() *Trie {
@@ -90,16 +111,28 @@ func (t *Trie) Insert(path string) {
 		}
 	}
 	current.isEnd = true
-}
-func (t *Trie) MatchInsert(path, pattern string) (*context.Params, bool) {
-	t.Insert(pattern)
-	return t.Match(path)
+	current.pattern = path
 }
 
-func (t *Trie) Match(path string) (*context.Params, bool) {
+func (t *Trie) Compare(path, pattern string) (*context.Params, bool) {
+	param, match, ok := t.Match(path)
+	if !ok {
+		return nil, ok
+	}
+
+	if match == pattern {
+		return nil, false
+	}
+
+	return param, true
+}
+
+func (t *Trie) Match(path string) (*context.Params, string, bool) {
 	current := t.root
 
 	params := make(context.Params)
+
+	var match string
 
 	parts := strings.Split(path, "/")
 	for _, part := range parts {
@@ -117,12 +150,16 @@ func (t *Trie) Match(path string) (*context.Params, bool) {
 			if current.regexpPattern.MatchString(part) {
 				params[current.paramName] = part
 			} else {
-				return nil, false
+				return nil, "", false
 			}
 		} else {
-			return nil, false
+			return nil, "", false
 		}
 	}
 
-	return &params, current.isEnd
+	if current.isEnd {
+		match = current.pattern
+	}
+
+	return &params, match, current.isEnd
 }

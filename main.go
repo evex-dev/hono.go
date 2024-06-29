@@ -9,12 +9,12 @@ import (
 func main() {
 	app := server.CreateHonoGo()
 
-	app.GET("/", func(c *context.Context) {
+	app.Get("/", func(c *context.Context) {
 		c.Status(200)
-		c.WriteString("Hello World")
-	}).POST("/2", func(c *context.Context) {
+		c.Text("Hello World")
+	}).Post("/2", func(c *context.Context) {
 		c.Status(200)
-		c.Write([]byte("Hello World 2"))
+		c.Body([]byte("Hello World 2"))
 	})
 
 

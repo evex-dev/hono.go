@@ -23,7 +23,7 @@ func (ctx *Context) ParseText() (string, error) {
 	return string(body), nil
 }
 
-func (ctx *Context) ParseJSON(target any) error {
+func (ctx *Context) ParseJson(target any) error {
 	body, err := ctx.ParseBody()
 	if err != nil {
 		return err

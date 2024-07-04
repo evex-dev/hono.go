@@ -10,4 +10,7 @@ type Context struct {
 	Res    http.ResponseWriter
 	Req    *http.Request
 	Params Params
+	End    func()
+	Next   func()
+	Var    map[string]any
 }

@@ -21,13 +21,14 @@ func Compose(routes ...*Route) HandlerFunc {
 
 			if r.IsMiddleware {
 				c.Next = func() {
-					rhm := RequestHandlerManager{
+					m := RequestHandlerManager{
 						IsEnd: isEnd,
 					}
 
-					rhm.RequestHandler(routes, r, c)
+					m.RequestHandler(c)
 
-					isEnd = rhm.IsEnd
+					isEnd = m.IsEnd
+					routes = m.Routes
 				}
 			} else {
 				c.Next = func() {
@@ -48,13 +49,14 @@ func Compose(routes ...*Route) HandlerFunc {
 			if isEnd {
 				return
 			} else {
-				rhm := RequestHandlerManager{
+				m := RequestHandlerManager{
 					IsEnd: isEnd,
 				}
 
-				rhm.RequestHandler(routes, r, c)
+				m.RequestHandler(c)
 
-				isEnd = rhm.IsEnd
+				isEnd = m.IsEnd
+				routes = m.Routes
 			}
 		}
 
@@ -85,16 +87,19 @@ func sortRoutes(routes []*Route) []*Route {
 
 type RequestHandlerManager struct {
 	IsEnd bool
+	Routes []*Route
 }
 
-func (rhm *RequestHandlerManager) RequestHandler(routes []*Route, r *Route, c *context.Context) {
-	if len(routes) > 1 {
-		routes = routes[1:]
+func (m *RequestHandlerManager) RequestHandler(c *context.Context) {
+	r := m.Routes[0]
+
+	if len(m.Routes) > 1 {
+		m.Routes = m.Routes[1:]
 	}
 
 	if r.IsMiddleware {
 		c.Next = func() {
-			rhm.RequestHandler(routes, r, c)
+			m.RequestHandler(c)
 		}
 	} else {
 		c.Next = func() {
@@ -103,18 +108,18 @@ func (rhm *RequestHandlerManager) RequestHandler(routes []*Route, r *Route, c *c
 	}
 
 	c.End = func() {
-		rhm.IsEnd = true
+		m.IsEnd = true
 	}
 
 	r.Handler(c)
 
-	if len(routes) == 0 {
-		rhm.IsEnd = true
+	if len(m.Routes) == 0 {
+		m.IsEnd = true
 	}
 
-	if rhm.IsEnd {
+	if m.IsEnd {
 		return
 	} else {
-		rhm.RequestHandler(routes, r, c)
+		m.RequestHandler(c)
 	}
 }

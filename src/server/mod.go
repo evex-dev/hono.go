@@ -13,21 +13,29 @@ func CreateHonoGo() *HonoGo {
 // Listen function
 
 type RunContext struct {
-	Addr string
+	Port string
+	Host string
+	isPortReady bool
+	isHostReady bool
 	Err error
 	Fire func() error
 }
 
 func (r *RunContext) Callback(callbackFunc func(addr string, err error) error) *RunContext {
-	callbackResult := callbackFunc(r.Addr, r.Err)
+	callbackResult := callbackFunc(r.Host + r.Port, r.Err)
 	if callbackResult != nil {
 		r.Err = callbackResult
 	}
 	return r
 }
 
-func (r *RunContext) SetPort(addr string) *RunContext {
-	r.Addr = ":" + addr
+func (r *RunContext) SetPort(port string) *RunContext {
+	r.Port = ":" + port
+	return r
+}
+
+func (r *RunContext) SetHost(host string) *RunContext {
+	r.Host = host
 	return r
 }
 
@@ -35,11 +43,14 @@ func (r *RunContext) SetPort(addr string) *RunContext {
 
 func (h *HonoGo) Init() *RunContext {
 	ctx := &RunContext{
-		Addr: ":3000",
+		Port: ":3000",
+		Host: "0.0.0.0",
+		isPortReady: true,
+		isHostReady: false,
 	}
 
 	ctx.Fire = func() error {
-		return h.Engine.Run(ctx.Addr)
+		return h.Engine.Run(ctx.Host + ctx.Port)
 	}
 
 	return ctx
@@ -47,11 +58,12 @@ func (h *HonoGo) Init() *RunContext {
 
 func (h *HonoGo) InitTLS(cert, key string) *RunContext {
 	ctx := &RunContext{
-		Addr: ":3000",
+		Host: "0.0.0.0",
+		Port: ":3000",
 	}
 
 	ctx.Fire = func() error {
-		return h.Engine.RunTLS(ctx.Addr, cert, key)
+		return h.Engine.RunTLS(ctx.Host + ctx.Port, cert, key)
 	}
 
 	return ctx

@@ -1,5 +1,5 @@
 # hono.go
-Web framework based on web standards in Golang.
+Web framework based on Honojs in Golang.
 
 - 日本語
 絶賛開発中なのでどんどんissue/PR建てて下さい。

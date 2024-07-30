@@ -22,6 +22,7 @@ func Compose(routes ...*Route) HandlerFunc {
 			if r.IsMiddleware {
 				c.Next = func() {
 					m := RequestHandlerManager{
+						Routes: routes,
 						IsEnd: isEnd,
 					}
 
@@ -50,6 +51,7 @@ func Compose(routes ...*Route) HandlerFunc {
 				return
 			} else {
 				m := RequestHandlerManager{
+					Routes: routes,
 					IsEnd: isEnd,
 				}
 

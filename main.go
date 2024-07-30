@@ -12,12 +12,15 @@ func main() {
 	app.Get("/", func(c *context.Context) {
 		c.Status(200)
 		c.Text("Hello World")
+		c.End()
 	}).Get("/2", func(c *context.Context) {
 		c.Status(200)
 		c.Html("<b>Hello World 2</b>")
+		c.End()
 	}).Post("/3", func(c *context.Context) {
 		c.Status(200)
 		c.Body([]byte("Hello World 3"))
+		c.End()
 	})
 
 	app.Use("/*", func(c *context.Context) {
@@ -25,7 +28,7 @@ func main() {
 	})
 
 	app.Init().SetPort("3000").Callback(func(addr string, err error) error {
-		fmt.Printf("Listening on http://localhost%s\n", addr)
+		fmt.Printf("Listening on http://%s\n", addr)
 		return err
 	}).Fire()
 }

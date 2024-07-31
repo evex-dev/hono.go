@@ -2,12 +2,18 @@ package main
 
 import (
 	"fmt"
+
 	"github.com/evex-dev/hono.go/src/context"
 	"github.com/evex-dev/hono.go/src/server"
 )
 
 func main() {
 	app := server.CreateHonoGo()
+
+	app.Use("/*", func(c *context.Context) {
+		fmt.Println("Catch Request on", c.URL().Path)
+		c.Next()
+	})
 
 	app.Get("/", func(c *context.Context) {
 		c.Status(200)
@@ -21,10 +27,6 @@ func main() {
 		c.Status(200)
 		c.Body([]byte("Hello World 3"))
 		c.End()
-	})
-
-	app.Use("/*", func(c *context.Context) {
-		fmt.Println("Catch Request on", c.URL().Path)
 	})
 
 	app.Init().SetPort("3000").Callback(func(addr string, err error) error {

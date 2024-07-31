@@ -8,12 +8,12 @@ import (
 
 func Compose(routes ...*Route) HandlerFunc {
 
-	sortRoutes(routes)
+	sortedRotues := sortRoutes(routes)
 
 	return func(c *context.Context) {
 		handler := func() {
 			m := RequestHandlerManager{
-				Routes: routes,
+				Routes: sortedRotues,
 				IsEnd:  false,
 			}
 			m.RequestHandler(c)

@@ -53,7 +53,7 @@ func (e *Engine) Serve(routes []*Route, w http.ResponseWriter, r *http.Request, 
 		Params:  params,
 	}
 
-	if countHandler(routes) == 0 {
+	if !existHandler(routes) {
 		routes = append(routes, &Route{
 			Handler: notFoundHandler,
 			Index:   0,
@@ -64,12 +64,11 @@ func (e *Engine) Serve(routes []*Route, w http.ResponseWriter, r *http.Request, 
 	Compose(routes...)(ctx)
 }
 
-func countHandler(routes []*Route) int {
-	count := 0
+func existHandler(routes []*Route) bool {
 	for _, route := range routes {
 		if !route.IsMiddleware {
-			count++
+			return true
 		}
 	}
-	return count
+	return false
 }

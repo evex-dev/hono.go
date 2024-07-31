@@ -17,6 +17,8 @@ func Compose(routes ...*Route) HandlerFunc {
 
 			if len(routes) > 1 {
 				routes = routes[1:]
+			}else {
+				isEnd = true
 			}
 
 			if r.IsMiddleware {
@@ -97,6 +99,8 @@ func (m *RequestHandlerManager) RequestHandler(c *context.Context) {
 
 	if len(m.Routes) > 1 {
 		m.Routes = m.Routes[1:]
+	}else {
+		m.IsEnd = true
 	}
 
 	if r.IsMiddleware {

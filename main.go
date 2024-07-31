@@ -19,13 +19,9 @@ func main() {
 		c.Text("Hello World")
 		c.End()
 	}).Get("/2", func(c *context.Context) {
-		c.Status(200)
-		c.Html("<b>Hello World 2</b>")
-		c.End()
+		c.Status(200).Html("<b>Hello World 2</b>").End()
 	}).Post("/3", func(c *context.Context) {
-		c.Status(200)
-		c.Body([]byte("Hello World 3"))
-		c.End()
+		c.Status(200).Body([]byte("Hello World 3")).End()
 	})
 
 	app.Init().SetHost("localhost").SetPort("3000").Callback(func(addr string, err error) error {

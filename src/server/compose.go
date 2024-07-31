@@ -29,14 +29,12 @@ func sortRoutes(routes []*Route) []*Route {
 		for j := 0; j < len(routes); j++ {
 			if routes[i].IsMiddleware && !routes[j].IsMiddleware {
 				routes[i], routes[j] = routes[j], routes[i]
-			}
-
-			if !routes[i].IsMiddleware && routes[j].IsMiddleware {
+			} else if !routes[i].IsMiddleware && routes[j].IsMiddleware {
 				routes[i], routes[j] = routes[j], routes[i]
-			}
-
-			if routes[i].Index > routes[j].Index {
-				routes[i], routes[j] = routes[j], routes[i]
+			} else {
+				if routes[i].Index > routes[j].Index {
+					routes[i], routes[j] = routes[j], routes[i]
+				}
 			}
 		}
 	}
@@ -52,7 +50,7 @@ type RequestHandlerManager struct {
 func (m *RequestHandlerManager) RequestHandler(c *context.Context) {
 	r := m.Routes[0]
 
-	if len(m.Routes) > 1 {
+	if len(m.Routes) > 0 {
 		m.Routes = m.Routes[1:]
 	}
 

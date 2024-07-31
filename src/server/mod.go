@@ -4,7 +4,7 @@ type HonoGo struct {
 	Engine *Engine
 }
 
-func CreateHonoGo() *HonoGo {
+func Create() *HonoGo {
 	return &HonoGo{
 		Engine: &Engine{},
 	}

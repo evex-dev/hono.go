@@ -19,7 +19,7 @@ import (
 )
 
 func main() {
-	app := server.CreateHonoGo()
+	app := server.Create()
 
 	app.GET("/", func(c *context.Context) {
 		c.Status(200)
@@ -44,7 +44,7 @@ import (
 )
 
 func main() {
-	app := server.CreateHonoGo()
+	app := server.Create()
 
 	app.Use("/*", func(c *context.Context) {
 		fmt.Println("Catch Request on", c.URL().Path)
@@ -57,7 +57,7 @@ func main() {
 	}).Get("/2", func(c *context.Context) {
 		c.Status(200).Html("<b>Hello World 2</b>").End()
 	}).Post("/3", func(c *context.Context) {
-		c.Status(200).Body([]byte("Hello World 3")).End()
+		c.Status(200).Body([]byte("Hello World 3"))
 	})
 
 	app.Init().SetHost("localhost").SetPort("3000").Callback(func(addr string, err error) error {

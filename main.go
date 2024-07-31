@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	app := server.CreateHonoGo()
+	app := server.Create()
 
 	app.Use("/*", func(c *context.Context) {
 		fmt.Println("Catch Request on", c.URL().Path)

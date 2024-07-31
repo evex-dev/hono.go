@@ -37,7 +37,6 @@ type Value struct {
 	Handler TrieFunc
 	Params  map[string]string
 	Name    string
-	Score   int
 }
 
 func NewTrie() *TrieNode {
@@ -49,33 +48,31 @@ func NewTrie() *TrieNode {
 }
 
 func (t *TrieNode) getHandlerSets(nodeParams, params map[string]string) []Value {
-	var handlerSets []Value
+	var sets []Value
 
 	for _, handler := range t.Methods {
-		handlerSet := Value{
+		set := Value{
 			Handler: handler,
 			Params:  make(map[string]string),
 			Name:    t.Name,
-			Score:   t.Order,
 		}
 
 		for key, value := range nodeParams {
-			handlerSet.Params[key] = value
+			set.Params[key] = value
 		}
 		for key, value := range params {
-			handlerSet.Params[key] = value
+			set.Params[key] = value
 		}
 
-		handlerSets = append(handlerSets, handlerSet)
+		sets = append(sets, set)
 	}
 
-	return handlerSets
+	return sets
 }
 
-// AddRoute => Insert
 func (t *TrieNode) Insert(path string) {
 	t.Name = path
-	parts := splitRoutingPath(path)
+	parts := splitPath(path)
 	curNode := t
 
 	for i, p := range parts {
@@ -136,34 +133,10 @@ func (t *TrieNode) Search(path string) []Value {
 			for _, pattern := range node.Patterns {
 				if pattern.Matcher != nil {
 					if pattern.Matcher.MatchString(part) {
-						params := make(map[string]string)
-						params[pattern.Name] = part
-
-						if isLast {
-							sets = append(sets, node.getHandlerSets(params, node.Params)...)
-							if childNode, exists := node.Children[pattern.Key]; exists {
-								sets = append(sets, childNode.getHandlerSets(params, node.Params)...)
-							}
-						} else {
-							if childNode, exists := node.Children[pattern.Key]; exists {
-								childNode.Params = params
-							}
-						}
+						sets = ParamsCopy(node, &pattern, part, isLast, sets)
 					}
 				} else {
-					params := make(map[string]string)
-					params[pattern.Name] = part
-
-					if isLast {
-						sets = append(sets, node.getHandlerSets(params, node.Params)...)
-						if childNode, exists := node.Children[pattern.Key]; exists {
-							sets = append(sets, childNode.getHandlerSets(params, node.Params)...)
-						}
-					} else {
-						if childNode, exists := node.Children[pattern.Key]; exists {
-							childNode.Params = params
-						}
-					}
+					sets = ParamsCopy(node, &pattern, part, isLast, sets)
 				}
 			}
 
@@ -180,26 +153,29 @@ func (t *TrieNode) Search(path string) []Value {
 		curNodes = tempNodes
 	}
 
-	return sortHandlerSets(sets)
+	return sets
 }
 
-func sortHandlerSets(sets []Value) []Value {
-	for i := 0; i < len(sets)-1; i++ {
-		for j := i + 1; j < len(sets); j++ {
-			if sets[i].Score > sets[j].Score {
-				sets[i], sets[j] = sets[j], sets[i]
-			}
+func ParamsCopy(node *TrieNode, pattern *Pattern, part string, isLast bool, sets []Value) []Value {
+	params := make(map[string]string)
+	params[pattern.Name] = part
+
+	if isLast {
+		sets = append(sets, node.getHandlerSets(params, node.Params)...)
+		if childNode, exists := node.Children[pattern.Key]; exists {
+			sets = append(sets, childNode.getHandlerSets(params, node.Params)...)
+		}
+	} else {
+		if childNode, exists := node.Children[pattern.Key]; exists {
+			childNode.Params = params
 		}
 	}
+
 	return sets
 }
 
 func splitPath(path string) []string {
 	return strings.Split(strings.Trim(path, "/"), "/")
-}
-
-func splitRoutingPath(path string) []string {
-	return splitPath(path)
 }
 
 func getPattern(part string) *Pattern {
@@ -221,7 +197,6 @@ func getPattern(part string) *Pattern {
 	return nil
 }
 
-// GetRoute => Find
 func (t *TrieNode) Find(path string) *ParamsValues {
 	sets := t.Search(path)
 	var values ParamsValues

@@ -54,8 +54,6 @@ func (m *RequestHandlerManager) RequestHandler(c *context.Context) {
 
 	if len(m.Routes) > 1 {
 		m.Routes = m.Routes[1:]
-	} else {
-		m.IsEnd = true
 	}
 
 	if r.IsMiddleware {

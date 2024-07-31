@@ -24,6 +24,7 @@ func main() {
 	app.GET("/", func(c *context.Context) {
 		c.Status(200)
 		c.WriteString("Hello World")
+		c.End()
 	})
 
 	app.Init().Fire()

@@ -11,57 +11,12 @@ func Compose(routes ...*Route) HandlerFunc {
 	sortRoutes(routes)
 
 	return func(c *context.Context) {
-		isEnd := false
 		handler := func() {
-			r := routes[0]
-
-			if len(routes) > 1 {
-				routes = routes[1:]
-			}else {
-				isEnd = true
+			m := RequestHandlerManager{
+				Routes: routes,
+				IsEnd:  false,
 			}
-
-			if r.IsMiddleware {
-				c.Next = func() {
-					m := RequestHandlerManager{
-						Routes: routes,
-						IsEnd: isEnd,
-					}
-
-					m.RequestHandler(c)
-
-					isEnd = m.IsEnd
-					routes = m.Routes
-				}
-			} else {
-				c.Next = func() {
-					fmt.Println("[WARN] c.Next is only for middleware")
-				}
-			}
-
-			c.End = func() {
-				isEnd = true
-			}
-
-			r.Handler(c)
-
-			if len(routes) == 0 {
-				isEnd = true
-			}
-
-			if isEnd {
-				return
-			} else {
-				m := RequestHandlerManager{
-					Routes: routes,
-					IsEnd: isEnd,
-				}
-
-				m.RequestHandler(c)
-
-				isEnd = m.IsEnd
-				routes = m.Routes
-			}
+			m.RequestHandler(c)
 		}
 
 		handler()
@@ -90,7 +45,7 @@ func sortRoutes(routes []*Route) []*Route {
 }
 
 type RequestHandlerManager struct {
-	IsEnd bool
+	IsEnd  bool
 	Routes []*Route
 }
 
@@ -99,7 +54,7 @@ func (m *RequestHandlerManager) RequestHandler(c *context.Context) {
 
 	if len(m.Routes) > 1 {
 		m.Routes = m.Routes[1:]
-	}else {
+	} else {
 		m.IsEnd = true
 	}
 

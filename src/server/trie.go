@@ -143,7 +143,7 @@ func NewTrieRouter(routes *Routes) *Router {
 			isFound := false
 
 			for _, route := range routes.RouteList {
-				if route.Method != method && method != "ALL" {
+				if route.Method != ALL_METHODS && route.Method != method {
 					continue
 				}
 

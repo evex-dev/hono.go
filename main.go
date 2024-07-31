@@ -29,7 +29,7 @@ func main() {
 		c.End()
 	})
 
-	app.Init().SetPort("3000").Callback(func(addr string, err error) error {
+	app.Init().SetHost("localhost").SetPort("3000").Callback(func(addr string, err error) error {
 		fmt.Printf("Listening on http://%s\n", addr)
 		return err
 	}).Fire()

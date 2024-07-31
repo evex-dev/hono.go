@@ -141,13 +141,14 @@ func NewTrieRouter(routes *Routes) *Router {
 			foundRoutes := FoundRoutes{}
 			params := &context.Params{}
 			isFound := false
+			fixedPattern := PathFixer(pattern)
 
 			for _, route := range routes.RouteList {
 				if route.Method != ALL_METHODS && route.Method != method {
 					continue
 				}
 
-				paramsResult, isSuccess := trie.Compare(route.Pattern, pattern)
+				paramsResult, isSuccess := trie.Compare(PathFixer(route.Pattern), fixedPattern)
 				if isSuccess {
 					params = MergeParams(params, paramsResult)
 					foundRoutes = append(foundRoutes, route)

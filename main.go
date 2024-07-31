@@ -12,7 +12,6 @@ func main() {
 
 	app.Use("/*", func(c *context.Context) {
 		fmt.Println("Catch Request on", c.URL().Path)
-		c.Next()
 	})
 
 	app.Get("/", func(c *context.Context) {

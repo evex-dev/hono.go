@@ -1,10 +1,7 @@
 # hono.go
 Web framework based on Honojs in Golang.
 
-- 日本語
-絶賛開発中なのでどんどんissue/PR建てて下さい。
-- English
-We are in the process of developing this project, so please keep on building issues/PRs.
+<img src="/.github/assets/hero.png" height="200" alt="Hero" />
 
 ## Example
 

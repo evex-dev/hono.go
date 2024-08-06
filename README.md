@@ -1,5 +1,6 @@
 # hono.go
-Web framework based on Honojs in Golang.
+Web framework based on Honojs in Golang.  
+Faster x1.5 than gin.
 
 <img src="/.github/assets/hero.png" height="200" alt="Hero" />
 

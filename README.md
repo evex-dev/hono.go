@@ -4,6 +4,11 @@ Faster x1.5 than gin.
 
 <img src="/.github/assets/hero.png" height="200" alt="Hero" />
 
+## Installation
+```sh
+go get -u github.com/evex-dev/hono.go
+```
+
 ## Example
 
 ### Example 1 - Minimal

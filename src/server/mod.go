@@ -75,49 +75,68 @@ func (h *HonoGo) NotFound(handler HandlerFunc) *HonoGo {
 	return h
 }
 
-func (h *HonoGo) Use(pattern string, handler HandlerFunc) *HonoGo {
-	h.Engine.AddRoute("ALL", pattern, handler, true)
+func (h *HonoGo) Use(pattern string, handlers ...HandlerFunc) *HonoGo {
+	for i := 0; i < len(handlers); i++ {
+		h.Engine.AddRoute("ALL", pattern, handlers[i], true)
+	}
+
 	return h
 }
 
 // Methods
 
-func (h *HonoGo) Get(pattern string, handler HandlerFunc) *HonoGo {
-	h.Engine.AddRoute("GET", pattern, handler, false)
+func (h *HonoGo) Get(pattern string, handlers ...HandlerFunc) *HonoGo {
+	for i := 0; i < len(handlers); i++ {
+		h.Engine.AddRoute("GET", pattern, handlers[i], false)
+	}
 	return h
 }
 
-func (h *HonoGo) Head(pattern string, handler HandlerFunc) *HonoGo {
-	h.Engine.AddRoute("HEAD", pattern, handler, false)
+func (h *HonoGo) Head(pattern string, handlers ...HandlerFunc) *HonoGo {
+	for i := 0; i < len(handlers); i++ {
+		h.Engine.AddRoute("GET", pattern, handlers[i], false)
+	}
 	return h
 }
 
-func (h *HonoGo) Post(pattern string, handler HandlerFunc) *HonoGo {
-	h.Engine.AddRoute("POST", pattern, handler, false)
+func (h *HonoGo) Post(pattern string, handlers ...HandlerFunc) *HonoGo {
+	for i := 0; i < len(handlers); i++ {
+		h.Engine.AddRoute("POST", pattern, handlers[i], false)
+	}
 	return h
 }
 
-func (h *HonoGo) Put(pattern string, handler HandlerFunc) *HonoGo {
-	h.Engine.AddRoute("PUT", pattern, handler, false)
+func (h *HonoGo) Put(pattern string, handlers ...HandlerFunc) *HonoGo {
+	for i := 0; i < len(handlers); i++ {
+		h.Engine.AddRoute("PUT", pattern, handlers[i], false)
+	}
 	return h
 }
 
-func (h *HonoGo) Delete(pattern string, handler HandlerFunc) *HonoGo {
-	h.Engine.AddRoute("DELETE", pattern, handler, false)
+func (h *HonoGo) Delete(pattern string, handlers ...HandlerFunc) *HonoGo {
+	for i := 0; i < len(handlers); i++ {
+		h.Engine.AddRoute("DELETE", pattern, handlers[i], false)
+	}
 	return h
 }
 
-func (h *HonoGo) Options(pattern string, handler HandlerFunc) *HonoGo {
-	h.Engine.AddRoute("OPTIONS", pattern, handler, false)
+func (h *HonoGo) Options(pattern string, handlers ...HandlerFunc) *HonoGo {
+	for i := 0; i < len(handlers); i++ {
+		h.Engine.AddRoute("OPTIONS", pattern, handlers[i], false)
+	}
 	return h
 }
 
-func (h *HonoGo) All(pattern string, handler HandlerFunc) *HonoGo {
-	h.Engine.AddRoute("ALL", pattern, handler, false)
+func (h *HonoGo) All(pattern string, handlers ...HandlerFunc) *HonoGo {
+	for i := 0; i < len(handlers); i++ {
+		h.Engine.AddRoute("ALL", pattern, handlers[i], false)
+	}
 	return h
 }
 
-func (h *HonoGo) On(method string, pattern string, handler HandlerFunc) *HonoGo {
-	h.Engine.AddRoute(method, pattern, handler, false)
+func (h *HonoGo) On(method string, pattern string, handlers ...HandlerFunc) *HonoGo {
+	for i := 0; i < len(handlers); i++ {
+		h.Engine.AddRoute(method, pattern, handlers[i], false)
+	}
 	return h
 }

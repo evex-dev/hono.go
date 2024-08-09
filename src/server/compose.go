@@ -1,12 +1,18 @@
 package server
 
 import (
+	"fmt"
+
 	"github.com/evex-dev/hono.go/src/context"
 )
 
 func Compose(routes ...*Route) HandlerFunc {
 
 	sortedRotues := sortRoutes(routes)
+
+	for i := 0; i < len(sortedRotues); i++ {
+		fmt.Println(sortedRotues[i].Method, sortedRotues[i].Pattern)
+	}
 
 	return func(c *context.Context) {
 		handler := func() {

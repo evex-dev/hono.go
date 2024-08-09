@@ -4,6 +4,7 @@ import (
 	"mime"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/evex-dev/hono.go/src/context"
 	"github.com/evex-dev/hono.go/src/server"
@@ -11,9 +12,8 @@ import (
 
 func ServeStatic(path string) server.HandlerFunc {
 
-	rpath := []rune(path)
-	if rpath[len(rpath)-1] == '/' {
-		path = string(rpath[:len(rpath)-2])
+	if strings.HasSuffix(path, "/") {
+		path = string([]rune(path)[:len(path)-2])
 	}
 
 	return func(c *context.Context) {

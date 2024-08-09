@@ -21,7 +21,7 @@ func ServeStatic(path string) server.HandlerFunc {
 		}
 		ctx.Status(200)
 		ctx.Body(file)
-		ctx.AddHeader("Content-Type", ctype)
+		ctx.SetHeader("Content-Type", ctype)
 		ctx.End()
 	}
 }
@@ -33,7 +33,7 @@ func CheckType(path string) string {
 
 func PoweredBy() server.HandlerFunc {
 	return func(ctx *context.Context) {
-		ctx.AddHeader("X-Powered-By", "Hono.go")
+		ctx.SetHeader("X-Powered-By", "Hono.go")
 		ctx.Next()
 	}
 }

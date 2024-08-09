@@ -10,6 +10,34 @@ type HtmlObject struct {
 	children   []string
 }
 
+func (h *Html) Render(obj *HtmlObject) string {
+	if obj == nil {
+		return ""
+	}
+
+	head := "<" + obj.tagName
+	for k, v := range obj.attributes {
+		if v == "" {
+			head += " " + k
+			continue
+		}
+
+		head += " " + EscapeHTML(k) + "=\"" + EscapeHTML(v) + "\""
+	}
+
+	if len(obj.children) > 0 {
+		head += ">"
+
+		body := ""
+		for _, v := range obj.children {
+			body += v
+		}
+		return head + body + "</" + obj.tagName + ">"
+	}
+
+	return head + "/>"
+}
+
 func (h *Html) Create(tagName string, attributes map[string]string, children ...string) *HtmlObject {
 	return &HtmlObject{
 		tagName:    tagName,

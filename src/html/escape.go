@@ -8,6 +8,7 @@ var htmlReplacer = strings.NewReplacer(
 	">", "&gt;",
 	"\"", "&quot;",
 	"'", "&#39;",
+	"\"", "&quot;",
 )
 
 func EscapeHTML(s string) string {

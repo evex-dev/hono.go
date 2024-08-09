@@ -8,17 +8,17 @@ import (
 
 func (e *Engine) AddRoute(method, pattern string, handler HandlerFunc, isMiddleware bool) {
 	e.Routes.RouteList = append(e.Routes.RouteList, &Route{
-		Method:  method,
-		Pattern: PathFixer(pattern),
-		Handler: handler,
-		Index:   len(e.Routes.RouteList),
+		Method:       method,
+		Pattern:      PathFixer(pattern),
+		Handler:      handler,
+		Index:        len(e.Routes.RouteList),
 		IsMiddleware: isMiddleware,
 	})
 }
 
 func (e *Engine) Run(addr string) error {
 	e.MatchRouter = NewTrieRouter(&e.Routes)
-	
+
 	return http.ListenAndServe(addr, e)
 }
 
@@ -44,25 +44,25 @@ func (e *Engine) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func (e *Engine) Serve(routes []*Route, w http.ResponseWriter, r *http.Request, params context.Params, notFoundHandler HandlerFunc) {
-	ctx := &context.Context{
-		Res:  w,
-		Req: r,
-		Params:  params,
+	c := &context.Context{
+		Res:    w,
+		Req:    r,
+		Params: params,
 	}
 
-	ctx.NotFound = func() {
-		notFoundHandler(ctx)
+	c.NotFound = func() {
+		notFoundHandler(c)
 	}
 
 	if !existHandler(routes) {
 		routes = append(routes, &Route{
-			Handler: notFoundHandler,
-			Index:   0,
+			Handler:      notFoundHandler,
+			Index:        0,
 			IsMiddleware: false,
 		})
 	}
 
-	Compose(routes...)(ctx)
+	Compose(routes...)(c)
 }
 
 func existHandler(routes []*Route) bool {

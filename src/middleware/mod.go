@@ -9,7 +9,7 @@ import (
 	"github.com/evex-dev/hono.go/src/server"
 )
 
-func serveStatic(path string) server.HandlerFunc {
+func ServeStatic(path string) server.HandlerFunc {
 	return func(ctx *context.Context) {
 		ctype := CheckType(path)
 		file, err := os.ReadFile(path)
@@ -20,7 +20,7 @@ func serveStatic(path string) server.HandlerFunc {
 			return
 		}
 		ctx.Status(200)
-		ctx.Res.Write(file)
+		ctx.Body(file)
 		ctx.AddHeader("Content-Type", ctype)
 		ctx.End()
 	}
@@ -31,7 +31,7 @@ func CheckType(path string) string {
 	return mime.TypeByExtension(ex)
 }
 
-func poweredBy() server.HandlerFunc {
+func PoweredBy() server.HandlerFunc {
 	return func(ctx *context.Context) {
 		ctx.AddHeader("X-Powered-By", "Hono.go")
 		ctx.Next()

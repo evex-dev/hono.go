@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/evex-dev/hono.go/src/context"
+	"github.com/evex-dev/hono.go/src/middleware"
 	"github.com/evex-dev/hono.go/src/server"
 )
 
@@ -12,14 +13,13 @@ func main() {
 
 	app.Use("/*", func(c *context.Context) {
 		fmt.Println("Catch Request on", c.URL().Path)
-	})
+	}).Use("/*", middleware.PoweredBy())
 
 	app.Get("/", func(c *context.Context) {
 		c.Status(200)
 		c.Text("Hello World")
-		c.End()
 	}).Get("/2", func(c *context.Context) {
-		c.Status(200).Html("<b>Hello World 2</b>").End()
+		c.Status(200).Html("<b>Hello World 2</b>")
 	}).Post("/3", func(c *context.Context) {
 		c.Status(200).Body([]byte("Hello World 3")).End()
 	})

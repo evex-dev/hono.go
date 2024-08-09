@@ -6,8 +6,6 @@ import (
 	"github.com/evex-dev/hono.go/src/context"
 )
 
-// discord look
-
 func (e *Engine) AddRoute(method, pattern string, handler HandlerFunc, isMiddleware bool) {
 	e.Routes.RouteList = append(e.Routes.RouteList, &Route{
 		Method:  method,
@@ -40,7 +38,6 @@ func (e *Engine) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}
 		c.Status(404)
 		c.Text("404 Not Found")
-		c.End()
 	}
 
 	e.Serve(matchedRoutes, w, r, *params, notFoundHandler)
@@ -51,6 +48,10 @@ func (e *Engine) Serve(routes []*Route, w http.ResponseWriter, r *http.Request, 
 		Res:  w,
 		Req: r,
 		Params:  params,
+	}
+
+	ctx.NotFound = func() {
+		notFoundHandler(ctx)
 	}
 
 	if !existHandler(routes) {

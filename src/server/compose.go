@@ -1,8 +1,6 @@
 package server
 
 import (
-	"fmt"
-
 	"github.com/evex-dev/hono.go/src/context"
 )
 
@@ -54,14 +52,8 @@ func (m *RequestHandlerManager) RequestHandler(c *context.Context) {
 		m.Routes = m.Routes[1:]
 	}
 
-	if r.IsMiddleware {
-		c.Next = func() {
-			m.RequestHandler(c)
-		}
-	} else {
-		c.Next = func() {
-			fmt.Println("[WARN] c.Next is only for middleware")
-		}
+	c.Next = func() {
+		m.RequestHandler(c)
 	}
 
 	c.End = func() {

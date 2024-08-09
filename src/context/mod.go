@@ -13,4 +13,5 @@ type Context struct {
 	End    func()
 	Next   func()
 	Var    map[string]any
+	NotFound func()
 }

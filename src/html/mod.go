@@ -2,17 +2,19 @@ package html
 
 import "strings"
 
-type Html struct{}
-
 type HtmlObject struct {
 	tagName    string
 	attributes map[string]string
-	children   []string
+	children   []HtmlObject
 }
 
-func (h *Html) Render(obj *HtmlObject) string {
+func Render(obj *HtmlObject) string {
 	if obj == nil {
 		return ""
+	}
+
+	if obj.tagName == "$$" {
+		return obj.attributes["content"]
 	}
 
 	head := "<" + obj.tagName
@@ -30,7 +32,7 @@ func (h *Html) Render(obj *HtmlObject) string {
 
 		body := ""
 		for _, v := range obj.children {
-			body += v
+			body += Render(&v)
 		}
 		return head + body + "</" + obj.tagName + ">"
 	}
@@ -38,7 +40,7 @@ func (h *Html) Render(obj *HtmlObject) string {
 	return head + "/>"
 }
 
-func (h *Html) Create(tagName string, attributes map[string]string, children ...string) *HtmlObject {
+func Create(tagName string, attributes map[string]string, children ...HtmlObject) *HtmlObject {
 	return &HtmlObject{
 		tagName:    tagName,
 		attributes: attributes,
@@ -46,450 +48,450 @@ func (h *Html) Create(tagName string, attributes map[string]string, children ...
 	}
 }
 
-func (h *Html) A(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("a", attributes, children...)
+func A(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("a", attributes, children...)
 }
 
-func (h *Html) Abbr(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("abbr", attributes, children...)
+func Abbr(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("abbr", attributes, children...)
 }
 
-func (h *Html) Address(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("address", attributes, children...)
+func Address(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("address", attributes, children...)
 }
 
-func (h *Html) Area(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("area", attributes, children...)
+func Area(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("area", attributes, children...)
 }
 
-func (h *Html) Article(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("article", attributes, children...)
+func Article(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("article", attributes, children...)
 }
 
-func (h *Html) Aside(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("aside", attributes, children...)
+func Aside(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("aside", attributes, children...)
 }
 
-func (h *Html) Audio(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("audio", attributes, children...)
+func Audio(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("audio", attributes, children...)
 }
 
-func (h *Html) B(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("b", attributes, children...)
+func B(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("b", attributes, children...)
 }
 
-func (h *Html) Base(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("base", attributes, children...)
+func Base(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("base", attributes, children...)
 }
 
-func (h *Html) Bdi(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("bdi", attributes, children...)
+func Bdi(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("bdi", attributes, children...)
 }
 
-func (h *Html) Bdo(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("bdo", attributes, children...)
+func Bdo(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("bdo", attributes, children...)
 }
 
-func (h *Html) Big(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("big", attributes, children...)
+func Big(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("big", attributes, children...)
 }
 
-func (h *Html) Blockquote(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("blockquote", attributes, children...)
+func Blockquote(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("blockquote", attributes, children...)
 }
 
-func (h *Html) Body(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("body", attributes, children...)
+func Body(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("body", attributes, children...)
 }
 
-func (h *Html) Br(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("br", attributes, children...)
+func Br(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("br", attributes, children...)
 }
 
-func (h *Html) Button(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("button", attributes, children...)
+func Button(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("button", attributes, children...)
 }
 
-func (h *Html) Canvas(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("canvas", attributes, children...)
+func Canvas(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("canvas", attributes, children...)
 }
 
-func (h *Html) Caption(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("caption", attributes, children...)
+func Caption(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("caption", attributes, children...)
 }
 
-func (h *Html) Center(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("center", attributes, children...)
+func Center(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("center", attributes, children...)
 }
 
-func (h *Html) Cite(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("cite", attributes, children...)
+func Cite(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("cite", attributes, children...)
 }
 
-func (h *Html) Code(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("code", attributes, children...)
+func Code(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("code", attributes, children...)
 }
 
-func (h *Html) Col(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("col", attributes, children...)
+func Col(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("col", attributes, children...)
 }
 
-func (h *Html) Colgroup(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("colgroup", attributes, children...)
+func Colgroup(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("colgroup", attributes, children...)
 }
 
-func (h *Html) Data(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("data", attributes, children...)
+func Data(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("data", attributes, children...)
 }
 
-func (h *Html) Datalist(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("datalist", attributes, children...)
+func Datalist(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("datalist", attributes, children...)
 }
 
-func (h *Html) Dd(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("dd", attributes, children...)
+func Dd(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("dd", attributes, children...)
 }
 
-func (h *Html) Del(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("del", attributes, children...)
+func Del(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("del", attributes, children...)
 }
 
-func (h *Html) Details(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("details", attributes, children...)
+func Details(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("details", attributes, children...)
 }
 
-func (h *Html) Dfn(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("dfn", attributes, children...)
+func Dfn(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("dfn", attributes, children...)
 }
 
-func (h *Html) Dialog(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("dialog", attributes, children...)
+func Dialog(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("dialog", attributes, children...)
 }
 
-func (h *Html) Div(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("div", attributes, children...)
+func Div(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("div", attributes, children...)
 }
 
-func (h *Html) Dl(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("dl", attributes, children...)
+func Dl(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("dl", attributes, children...)
 }
 
-func (h *Html) Dt(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("dt", attributes, children...)
+func Dt(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("dt", attributes, children...)
 }
 
-func (h *Html) Em(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("em", attributes, children...)
+func Em(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("em", attributes, children...)
 }
 
-func (h *Html) Embed(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("embed", attributes, children...)
+func Embed(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("embed", attributes, children...)
 }
 
-func (h *Html) Fieldset(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("fieldset", attributes, children...)
+func Fieldset(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("fieldset", attributes, children...)
 }
 
-func (h *Html) Figcaption(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("figcaption", attributes, children...)
+func Figcaption(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("figcaption", attributes, children...)
 }
 
-func (h *Html) Figure(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("figure", attributes, children...)
+func Figure(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("figure", attributes, children...)
 }
 
-func (h *Html) Footer(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("footer", attributes, children...)
+func Footer(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("footer", attributes, children...)
 }
 
-func (h *Html) Form(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("form", attributes, children...)
+func Form(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("form", attributes, children...)
 }
 
-func (h *Html) H1(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("h1", attributes, children...)
+func H1(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("h1", attributes, children...)
 }
 
-func (h *Html) H2(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("h2", attributes, children...)
+func H2(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("h2", attributes, children...)
 }
 
-func (h *Html) H3(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("h3", attributes, children...)
+func H3(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("h3", attributes, children...)
 }
 
-func (h *Html) H4(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("h4", attributes, children...)
+func H4(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("h4", attributes, children...)
 }
 
-func (h *Html) H5(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("h5", attributes, children...)
+func H5(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("h5", attributes, children...)
 }
 
-func (h *Html) H6(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("h6", attributes, children...)
+func H6(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("h6", attributes, children...)
 }
 
-func (h *Html) Head(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("head", attributes, children...)
+func Head(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("head", attributes, children...)
 }
 
-func (h *Html) Header(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("header", attributes, children...)
+func Header(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("header", attributes, children...)
 }
 
-func (h *Html) Hr(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("hr", attributes, children...)
+func Hr(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("hr", attributes, children...)
 }
 
-func (h *Html) Html(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("html", attributes, children...)
+func Html(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("html", attributes, children...)
 }
 
-func (h *Html) I(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("i", attributes, children...)
+func I(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("i", attributes, children...)
 }
 
-func (h *Html) Iframe(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("iframe", attributes, children...)
+func Iframe(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("iframe", attributes, children...)
 }
 
-func (h *Html) Img(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("img", attributes, children...)
+func Img(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("img", attributes, children...)
 }
 
-func (h *Html) Input(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("input", attributes, children...)
+func Input(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("input", attributes, children...)
 }
 
-func (h *Html) Ins(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("ins", attributes, children...)
+func Ins(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("ins", attributes, children...)
 }
 
-func (h *Html) Kbd(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("kbd", attributes, children...)
+func Kbd(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("kbd", attributes, children...)
 }
 
-func (h *Html) Label(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("label", attributes, children...)
+func Label(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("label", attributes, children...)
 }
 
-func (h *Html) Legend(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("legend", attributes, children...)
+func Legend(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("legend", attributes, children...)
 }
 
-func (h *Html) Li(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("li", attributes, children...)
+func Li(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("li", attributes, children...)
 }
 
-func (h *Html) Link(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("link", attributes, children...)
+func Link(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("link", attributes, children...)
 }
 
-func (h *Html) Main(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("main", attributes, children...)
+func Main(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("main", attributes, children...)
 }
 
-func (h *Html) Map(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("map", attributes, children...)
+func Map(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("map", attributes, children...)
 }
 
-func (h *Html) Menu(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("menu", attributes, children...)
+func Menu(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("menu", attributes, children...)
 }
 
-func (h *Html) Meta(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("meta", attributes, children...)
+func Meta(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("meta", attributes, children...)
 }
 
-func (h *Html) Nav(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("nav", attributes, children...)
+func Nav(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("nav", attributes, children...)
 }
 
-func (h *Html) Noscript(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("noscript", attributes, children...)
+func Noscript(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("noscript", attributes, children...)
 }
 
-func (h *Html) Ol(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("ol", attributes, children...)
+func Ol(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("ol", attributes, children...)
 }
 
-func (h *Html) Optgroup(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("optgroup", attributes, children...)
+func Optgroup(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("optgroup", attributes, children...)
 }
 
-func (h *Html) Option(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("option", attributes, children...)
+func Option(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("option", attributes, children...)
 }
 
-func (h *Html) Output(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("output", attributes, children...)
+func Output(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("output", attributes, children...)
 }
 
-func (h *Html) P(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("p", attributes, children...)
+func P(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("p", attributes, children...)
 }
 
-func (h *Html) Param(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("param", attributes, children...)
+func Param(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("param", attributes, children...)
 }
 
-func (h *Html) Pre(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("pre", attributes, children...)
+func Pre(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("pre", attributes, children...)
 }
 
-func (h *Html) Progress(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("progress", attributes, children...)
+func Progress(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("progress", attributes, children...)
 }
 
-func (h *Html) Q(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("q", attributes, children...)
+func Q(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("q", attributes, children...)
 }
 
-func (h *Html) Rp(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("rp", attributes, children...)
+func Rp(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("rp", attributes, children...)
 }
 
-func (h *Html) Rt(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("rt", attributes, children...)
+func Rt(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("rt", attributes, children...)
 }
 
-func (h *Html) Ruby(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("ruby", attributes, children...)
+func Ruby(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("ruby", attributes, children...)
 }
 
-func (h *Html) S(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("s", attributes, children...)
+func S(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("s", attributes, children...)
 }
 
-func (h *Html) Samp(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("samp", attributes, children...)
+func Samp(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("samp", attributes, children...)
 }
 
-func (h *Html) Script(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("script", attributes, children...)
+func Script(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("script", attributes, children...)
 }
 
-func (h *Html) Section(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("section", attributes, children...)
+func Section(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("section", attributes, children...)
 }
 
-func (h *Html) Select(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("select", attributes, children...)
+func Select(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("select", attributes, children...)
 }
 
-func (h *Html) Small(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("small", attributes, children...)
+func Small(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("small", attributes, children...)
 }
 
-func (h *Html) Source(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("source", attributes, children...)
+func Source(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("source", attributes, children...)
 }
 
-func (h *Html) Span(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("span", attributes, children...)
+func Span(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("span", attributes, children...)
 }
 
-func (h *Html) Strong(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("strong", attributes, children...)
+func Strong(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("strong", attributes, children...)
 }
 
-func (h *Html) Style(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("style", attributes, children...)
+func Style(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("style", attributes, children...)
 }
 
-func (h *Html) Sub(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("sub", attributes, children...)
+func Sub(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("sub", attributes, children...)
 }
 
-func (h *Html) Summary(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("summary", attributes, children...)
+func Summary(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("summary", attributes, children...)
 }
 
-func (h *Html) Sup(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("sup", attributes, children...)
+func Sup(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("sup", attributes, children...)
 }
 
-func (h *Html) Table(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("table", attributes, children...)
+func Table(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("table", attributes, children...)
 }
 
-func (h *Html) Tbody(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("tbody", attributes, children...)
+func Tbody(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("tbody", attributes, children...)
 }
 
-func (h *Html) Td(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("td", attributes, children...)
+func Td(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("td", attributes, children...)
 }
 
-func (h *Html) Template(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("template", attributes, children...)
+func Template(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("template", attributes, children...)
 }
 
-func (h *Html) Textarea(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("textarea", attributes, children...)
+func Textarea(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("textarea", attributes, children...)
 }
 
-func (h *Html) Tfoot(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("tfoot", attributes, children...)
+func Tfoot(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("tfoot", attributes, children...)
 }
 
-func (h *Html) Th(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("th", attributes, children...)
+func Th(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("th", attributes, children...)
 }
 
-func (h *Html) Thead(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("thead", attributes, children...)
+func Thead(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("thead", attributes, children...)
 }
 
-func (h *Html) Time(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("time", attributes, children...)
+func Time(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("time", attributes, children...)
 }
 
-func (h *Html) Title(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("title", attributes, children...)
+func Title(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("title", attributes, children...)
 }
 
-func (h *Html) Tr(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("tr", attributes, children...)
+func Tr(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("tr", attributes, children...)
 }
 
-func (h *Html) Track(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("track", attributes, children...)
+func Track(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("track", attributes, children...)
 }
 
-func (h *Html) U(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("u", attributes, children...)
+func U(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("u", attributes, children...)
 }
 
-func (h *Html) Ul(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("ul", attributes, children...)
+func Ul(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("ul", attributes, children...)
 }
 
-func (h *Html) Var(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("var", attributes, children...)
+func Var(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("var", attributes, children...)
 }
 
-func (h *Html) Video(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("video", attributes, children...)
+func Video(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("video", attributes, children...)
 }
 
-func (h *Html) Wbr(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("wbr", attributes, children...)
+func Wbr(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("wbr", attributes, children...)
 }
 
-func (h *Html) Xmp(attributes map[string]string, children ...string) *HtmlObject {
-	return h.Create("xmp", attributes, children...)
+func Xmp(attributes map[string]string, children ...HtmlObject) *HtmlObject {
+	return Create("xmp", attributes, children...)
 }
 
-func (h *Html) Text(text ...string) *HtmlObject {
-	return h.Create("$$", map[string]string{
-		"content": EscapeHTML(strings.Join(text, "")),
+func Text(children ...string) *HtmlObject {
+	return Create("$$", map[string]string{
+		"content": EscapeHTML(strings.Join(children, "")),
 	})
 }
 
-func (h *Html) Raw(children ...string) *HtmlObject {
-	return h.Create("$$", map[string]string{
+func Raw(children ...string) *HtmlObject {
+	return Create("$$", map[string]string{
 		"content": strings.Join(children, ""),
 	})
 }

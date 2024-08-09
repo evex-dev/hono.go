@@ -4,26 +4,25 @@ import (
 	"encoding/json"
 )
 
-func (ctx *Context) Body(value []byte) *Context {
-	ctx.Res.Write(value)
-	return ctx
+func (c *Context) Body(value []byte) *Context {
+	c.Res.Write(value)
+	return c
 }
-func (ctx *Context) Text(value string) *Context {
-	ctx.SetHeader("Content-Type", "text/plain; charset=utf-8")
-	ctx.Body([]byte(value))
-	return ctx
+func (c *Context) Text(value string) *Context {
+	c.SetHeader("Content-Type", "text/plain; charset=utf-8")
+	c.Body([]byte(value))
+	return c
 }
 
-func (ctx *Context) Json(value any) *Context {
+func (c *Context) Json(value any) *Context {
 	marshal, _ := json.Marshal(value)
-	ctx.SetHeader("Content-Type", "application/json; charset=utf-8")
-	ctx.Body(marshal)
-	return ctx
+	c.SetHeader("Content-Type", "application/json; charset=utf-8")
+	c.Body(marshal)
+	return c
 }
 
-func (ctx *Context) Html(value string) *Context {
-	ctx.SetHeader("Content-Type", "text/html; charset=utf-8")
-	ctx.Body([]byte(value))
-	return ctx
+func (c *Context) Html(value string) *Context {
+	c.SetHeader("Content-Type", "text/html; charset=utf-8")
+	c.Body([]byte(value))
+	return c
 }
-

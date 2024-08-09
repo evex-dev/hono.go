@@ -1,16 +1,16 @@
 package context
 
-func (ctx *Context) SetHeader(key, value string) *Context {
-	ctx.Res.Header().Set(key, value)
-	return ctx
+func (c *Context) SetHeader(key, value string) *Context {
+	c.Res.Header().Set(key, value)
+	return c
 }
 
-func (ctx *Context) AddHeader(key, value string) *Context {
-	ctx.Res.Header().Add(key, value)
-	return ctx
+func (c *Context) AddHeader(key, value string) *Context {
+	c.Res.Header().Add(key, value)
+	return c
 }
 
-func (ctx *Context) Status(status int) *Context {
-	ctx.Res.WriteHeader(status)
-	return ctx
+func (c *Context) Status(status int) *Context {
+	c.Res.WriteHeader(status)
+	return c
 }

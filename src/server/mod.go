@@ -13,16 +13,16 @@ func Create() *HonoGo {
 // Listen function
 
 type RunContext struct {
-	Port string
-	Host string
+	Port        string
+	Host        string
 	isPortReady bool
 	isHostReady bool
-	Err error
-	Fire func() error
+	Err         error
+	Fire        func() error
 }
 
 func (r *RunContext) Callback(callbackFunc func(addr string, err error) error) *RunContext {
-	callbackResult := callbackFunc(r.Host + r.Port, r.Err)
+	callbackResult := callbackFunc(r.Host+r.Port, r.Err)
 	if callbackResult != nil {
 		r.Err = callbackResult
 	}
@@ -42,31 +42,31 @@ func (r *RunContext) SetHost(host string) *RunContext {
 // Init
 
 func (h *HonoGo) Init() *RunContext {
-	ctx := &RunContext{
-		Port: ":3000",
-		Host: "0.0.0.0",
+	c := &RunContext{
+		Port:        ":3000",
+		Host:        "0.0.0.0",
 		isPortReady: true,
 		isHostReady: false,
 	}
 
-	ctx.Fire = func() error {
-		return h.Engine.Run(ctx.Host + ctx.Port)
+	c.Fire = func() error {
+		return h.Engine.Run(c.Host + c.Port)
 	}
 
-	return ctx
+	return c
 }
 
 func (h *HonoGo) InitTLS(cert, key string) *RunContext {
-	ctx := &RunContext{
+	c := &RunContext{
 		Host: "0.0.0.0",
 		Port: ":3000",
 	}
 
-	ctx.Fire = func() error {
-		return h.Engine.RunTLS(ctx.Host + ctx.Port, cert, key)
+	c.Fire = func() error {
+		return h.Engine.RunTLS(c.Host+c.Port, cert, key)
 	}
 
-	return ctx
+	return c
 }
 
 // NotFound And Middleware

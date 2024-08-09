@@ -13,6 +13,7 @@ func main() {
 
 	app.Use("/*", func(c *context.Context) {
 		fmt.Println("Catch Request on", c.URL().Path)
+		c.Next()
 	}).Use("/*", middleware.PoweredBy())
 
 	app.Get("/", func(c *context.Context) {

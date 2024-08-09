@@ -9,7 +9,7 @@ import (
 func (e *Engine) AddRoute(method, pattern string, handler HandlerFunc, isMiddleware bool) {
 	e.Routes.RouteList = append(e.Routes.RouteList, &Route{
 		Method:  method,
-		Pattern: pattern,
+		Pattern: PathFixer(pattern),
 		Handler: handler,
 		Index:   len(e.Routes.RouteList),
 		IsMiddleware: isMiddleware,

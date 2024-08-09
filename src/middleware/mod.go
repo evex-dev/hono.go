@@ -11,8 +11,12 @@ import (
 
 func ServeStatic(path string) server.HandlerFunc {
 	return func(ctx *context.Context) {
-		ctype := CheckType(path)
-		file, err := os.ReadFile(path)
+		ctype := CheckType(ctx.URL().Path)
+		rpath := []rune(path)
+		if rpath[len(rpath)-1] == '/' {
+			path = string(rpath[:len(rpath)-2])
+		}
+		file, err := os.ReadFile(path + ctx.URL().RawPath)
 		if err != nil {
 			ctx.Status(404)
 			ctx.Text("404 not found")

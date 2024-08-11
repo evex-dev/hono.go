@@ -8,7 +8,7 @@ import (
 	"github.com/evex-dev/hono.go/src/server"
 )
 
-func main() {
+func _() {
 	app := server.Create()
 
 	app.Use("/*", func(c *context.Context) {

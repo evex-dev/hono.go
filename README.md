@@ -11,6 +11,8 @@ go get -u github.com/evex-dev/hono.go
 
 Documentation is coming soon.
 
+Support Local, Vercel, and more.
+
 ## Example
 
 ### Example 1 - Minimal
@@ -107,3 +109,19 @@ func main() {
 	}).Fire()
 }
 ```
+
+### Example 4 - Vercel
+
+```go
+package handler
+ 
+import (
+  "net/http"
+
+  ...
+)
+ 
+func Handler(w http.ResponseWriter, r *http.Request) {
+  app.ServeHTTP(w, r)
+}
+``
